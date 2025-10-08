@@ -1,17 +1,32 @@
+# Node dependencies
 node_modules
-npm-debug.log
-build
-.dockerignore
-**/.git
-**/.DS_Store
 **/node_modules
-**Dockerfile
+
+# Build outputs
+build
+dist
+
+# Logs
+npm-debug.log
+*.log
+
+# Docker & Compose files
+Dockerfile
 Dockerfile*
+docker-compose*.yml
+
+# Git files
 .git
-.github
 .gitignore
-dist/**
-README.md
-.vscode
-app-mongo-data
+.github
+
+# System and editor files
+.DS_Store
+.vscode/
+
+# MongoDB local data
 app-mongo-data/
+
+# Docs and meta files
+README.md
+.dockerignore
