@@ -1,4 +1,4 @@
-# 🧠 YOLO App — Dockerized MERN Application
+# YOLO App — Dockerized MERN Application
 
 ## 📋 Overview
 
@@ -7,7 +7,7 @@ The project demonstrates DevOps containerization principles by separating the fr
 
 ---
 
-## 🧩 Project Structure
+## Project Structure
 
 ```
 yolo/
