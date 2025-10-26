@@ -1,3 +1,10 @@
 ---
+- name: Deploy YOLO e-commerce application
+  hosts: all
+  become: true
 
-    
+  roles:
+    - network
+    - mongodb
+    - backend
+    - frontend

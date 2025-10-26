@@ -1,9 +1,8 @@
-# YOLO App — Dockerized MERN Application
+# YOLO App — Dockerized MERN Application (Ansible Deployment)
 
 ## 📋 Overview
 
-YOLO App is a full-stack MERN (MongoDB, Express, React, Node.js) application deployed as microservices using Docker and Docker Compose.
-The project demonstrates DevOps containerization principles by separating the frontend, backend, and database into independent, interconnected services.
+YOLO App is a full-stack MERN (MongoDB, Express, React, Node.js) application deployed as **microservices** using **Docker** and **Ansible**.
 
 ---
 
@@ -21,8 +20,13 @@ yolo/
 │   ├── package.json
 │   └── src/
 │
-├── docker-compose.yaml
-├── .dockerignore
+├── roles/
+│   ├── network/
+│   ├── mongodb/
+│   ├── backend/
+│   └── frontend/
+├── playbook.yml
+├── inventory.yml
 └── README.md
 ```
 
@@ -35,7 +39,8 @@ yolo/
 | Frontend         | React.js (served via Nginx) |
 | Backend          | Node.js + Express           |
 | Database         | MongoDB                     |
-| Containerization | Docker & Docker Compose     |
+| Containerization | Docker                      |
+| Orchestration    | Ansible                     |
 
 ---
 
@@ -48,23 +53,33 @@ git clone https://github.com/h1baq/yolo.git
 cd yolo
 ```
 
-### 2️⃣ Build and Run with Docker Compose
+### 2️⃣ Spin up the VM (if using Vagrant)
 
 ```bash
-docker-compose up --build
+vagrant up
+vagrant ssh
 ```
 
-This builds the Docker images for the frontend (`yolo-client`) and backend (`yolo-backend`), starts MongoDB, and connects all containers through a shared bridge network.
+### 3️⃣ Deploy the Application with Ansible
+
+```bash
+ansible-playbook -i inventory.yml playbook.yml
+```
+
+This playbook will:
+
+* Create Docker network `app-net`
+* Launch MongoDB container
+* Launch backend container
+* Launch frontend container
 
 ---
 
-## 🌐 Service URLs
-
-| Service  | Container    | Port                                           |
-| -------- | ------------ | ---------------------------------------------- |
-| Frontend | yolo-client  | [http://localhost:3000](http://localhost:3000) |
-| Backend  | yolo-backend | [http://localhost:5000](http://localhost:5000) |
-| Database | mongo        | Port 27017                                     |
+| Service  | Container    | Port                             |
+| -------- | ------------ | -------------------------------- |
+| Frontend | yolo-client  | [http://10.0.2.15:3000](http://10.0.2.15:3000) |
+| Backend  | yolo-backend | [http://10.0.2.15:5000](http://10.0.2.15:5000) |
+| Database | mongo        | Port 27017                       |
 
 ---
 
@@ -77,40 +92,39 @@ This builds the Docker images for the frontend (`yolo-client`) and backend (`yol
 
 ---
 
-## 🧪 Testing Locally
+## 🧪 Verification
 
-After running `docker-compose up`, verify containers:
+After running the playbook, verify the containers:
 
 ```bash
-docker ps
+docker ps -a
 ```
 
-Then open:
+Expected output:
 
-* Frontend: [http://localhost:3000](http://localhost:3000)
-* Backend API: [http://localhost:5000/api](http://localhost:5000/api)
+| Container Name | Image                     | Status | Ports       |
+| -------------- | ------------------------- | ------ | ----------- |
+| mongo          | mongo:6                   | Up     | 27017:27017 |
+| yolo-backend   | h1baq/yolo-backend:v1.0.0 | Up     | 5000:5000   |
+| yolo-client    | h1baq/yolo-client:v1.0.0  | Up     | 3000:80     |
 
 ---
 
 ## 🧰 Useful Commands
 
-| Command                                 | Description                    |
-| --------------------------------------- | ------------------------------ |
-| `docker-compose up --build`             | Build and start all containers |
-| `docker-compose down`                   | Stop and remove containers     |
-| `docker images`                         | List all images                |
-| `docker push h1baq/yolo-client:v1.0.0`  | Push frontend image            |
-| `docker push h1baq/yolo-backend:v1.0.0` | Push backend image             |
+| Command                                          | Description                       |
+| ------------------------------------------------ | --------------------------------- |
+| `ansible-playbook -i inventory.yml playbook.yml` | Deploy all containers via Ansible |
+| `docker ps -a`                                   | List all containers               |
+| `docker logs <container>`                        | Check logs of a container         |
+| `docker rm -f <container>`                       | Remove a container                |
+| `docker network ls`                              | List all Docker networks          |
 
 ---
 
 ## 🏗️ Networking
 
-A custom Docker bridge network (`app-net`) connects:
-
-* React frontend
-* Node/Express backend
-* MongoDB database
+All containers are connected using a **custom Docker bridge network** (`app-net`) for internal communication.
 
 ---
 
@@ -124,3 +138,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 **Hibaq Adan (h1baq)**
 📧 [hibaqku7@gmail.com](mailto:hibaqku7@gmail.com)
+
+---
+
+
