@@ -1,0 +1,11 @@
+---
+- name: Run frontend container
+  docker_container:
+    name: yolo-client
+    image: h1baq/yolo-client:v1.0.0
+    state: started
+    restart_policy: always
+    ports:
+      - "3000:80"
+    networks:
+      - name: app-net

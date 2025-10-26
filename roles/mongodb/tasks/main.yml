@@ -1,0 +1,12 @@
+- name: Run MongoDB container
+  docker_container:
+    name: mongo
+    image: mongo:6
+    state: started
+    restart_policy: always
+    networks:
+      - name: app-net
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db

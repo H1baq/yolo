@@ -1,0 +1,5 @@
+---
+- name: Ensure Docker network app-net exists
+  community.docker.docker_network:
+    name: app-net
+    state: present

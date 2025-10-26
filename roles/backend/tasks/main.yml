@@ -1,0 +1,15 @@
+---
+- name: Run backend container
+  docker_container:
+    name: yolo-backend
+    image: h1baq/yolo-backend:v1.0.0
+    networks:
+      - name: app-net
+    ports:
+      - "5000:5000"
+    env:
+      MONGO_URL: "mongodb://mongo:27017/yolomy"
+      PORT: "5000"
+    command: "npm start"
+    state: started
+    restart_policy: always
